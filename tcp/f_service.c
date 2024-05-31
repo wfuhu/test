@@ -44,7 +44,7 @@ int main()
     }
 
     char ip[32];
-    printf("客户端ip%S,端口%d\n",inet_ntop(AF_INET,&caddr.sin_addr.s_addr,ip,sizeof(ip)),ntohs(caddr.sin_port));
+    printf("客户端ip%s,端口%d\n",inet_ntop(AF_INET,&caddr.sin_addr.s_addr,ip,sizeof(ip)),ntohs(caddr.sin_port));
     
     while (1)
     {
@@ -57,7 +57,7 @@ int main()
         }
         else if(len==0)
         {
-            printf("");
+            printf("00");
             break;
         }
         else

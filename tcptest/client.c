@@ -1,12 +1,13 @@
+// client.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include<arpa/inet.h>
+#include <arpa/inet.h>
 
 int main()
 {
-        // 1. 创建通信的套接字
+    // 1. 创建通信的套接字
     int fd = socket(AF_INET, SOCK_STREAM, 0);
     if(fd == -1)
     {
@@ -26,32 +27,37 @@ int main()
         perror("connect");
         exit(0);
     }
-        char buff[1024]="ni hao";
+
+    // 3. 和服务器端通信
+    int number = 0;
     while(1)
     {
+        // 发送数据
+        char buf[1024];
+        sprintf(buf, "你好, 服务器...%d\n", number++);
+        write(fd, buf, strlen(buf)+1);
         
-
-        write(fd, buff, strlen(buff)+1);
-        memset(buff,0,sizeof(buff));//接收数据
-        int len=recv(fd,buff,sizeof(buff),0);
-        if(len>0)
+        // 接收数据
+        memset(buf, 0, sizeof(buf));
+        int len = read(fd, buf, sizeof(buf));
+        if(len > 0)
         {
-            printf("service%s\n",buff);
+            printf("服务器say: %s\n", buf);
         }
-        else if(len==0)
+        else if(len  == 0)
         {
-            printf("duankai");
+            printf("服务器断开了连接...\n");
             break;
         }
         else
         {
-            perror("recv");
+            perror("read");
             break;
         }
+        sleep(1);   // 每隔1s发送一条数据
     }
 
     close(fd);
+
     return 0;
-
-
 }
